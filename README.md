@@ -1,4 +1,4 @@
-# LocalServices: Subscription Marketplace for Local Service Providers
+# LocalPro: Subscription Marketplace for Local Service Providers
 
 A full-stack Django marketplace where local service providers (plumbers, tutors, salons and more) subscribe to a plan, get listed and reviewed, and are automatically promoted to matching customers over **WhatsApp** and **Facebook**.
 
@@ -99,8 +99,8 @@ Never commit a real `.env` file.
 The `Dockerfile` builds the Tailwind CSS, collects static files, and serves the app with Gunicorn on port 8080, ready for Google Cloud Run:
 
 ```bash
-docker build -t localservices .
-docker run -p 8080:8080 --env-file .env localservices
+docker build -t localpro .
+docker run -p 8080:8080 --env-file .env localpro
 ```
 
 ## My contributions
