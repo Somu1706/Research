@@ -24,7 +24,7 @@ const FALLBACK_PLANS: DjangoPlan[] = [
     reach_limit: 1000,
     whatsapp_enabled: false,
     facebook_enabled: false,
-    description: "Free plan. The platform will reach out to 5 potential customers in your city who need your type of service."
+    description: "Get your business listed on LocalPro and found by customers in your city."
   },
   {
     pk: 2,
@@ -34,7 +34,7 @@ const FALLBACK_PLANS: DjangoPlan[] = [
     reach_limit: 5000,
     whatsapp_enabled: true,
     facebook_enabled: false,
-    description: "The platform will reach out to 100 potential customers via WhatsApp in your city who need your type of service."
+    description: "We reach up to 5,000 customers in your city through WhatsApp."
   },
   {
     pk: 3,
@@ -44,7 +44,7 @@ const FALLBACK_PLANS: DjangoPlan[] = [
     reach_limit: 10000,
     whatsapp_enabled: true,
     facebook_enabled: true,
-    description: "The platform will reach out to 10,000 potential customers via WhatsApp AND Facebook in your city who need your type of service."
+    description: "We reach up to 10,000 customers in your city through WhatsApp and Facebook."
   }
 ];
 
@@ -97,11 +97,11 @@ export default function App() {
   const FAQS = [
     {
       q: "How does the customer matching work?",
-      a: "Our platform continuously aggregates and cleans a localized directory of customers who opted in to receive service offers in their cities. When you subscribe, we automatically scan our database for matching leads based on your city and service category."
+      a: "Our platform continuously aggregates and cleans a localized directory of customers who opted in to receive service offers in their cities. When you subscribe to Pro or Max, we automatically find opted-in customers in your city and message them about your business."
     },
     {
       q: "What channels are used for outreaches?",
-      a: "Depending on your plan, we use official WhatsApp templates and automated Facebook Page messages. The Basic plan uses standard emails, the Pro plan introduces WhatsApp campaigns, and the Max plan operates across both WhatsApp and Facebook messaging."
+      a: "Pro reaches customers through official WhatsApp Business messages, and Max adds automated Facebook Page messaging. The Basic plan lists your business without automated messaging."
     },
     {
       q: "Can I upgrade or downgrade my plan at any time?",
@@ -219,7 +219,7 @@ export default function App() {
                   <ul className="space-y-4 mb-8">
                     <li className="flex items-center gap-3 text-xs text-gray-300">
                       <Check size={14} className="text-emerald-400 shrink-0" />
-                      <span>Reach <strong>{plan.reach_limit}</strong> customers in city</span>
+                      <span>{plan.whatsapp_enabled || plan.facebook_enabled ? <>Reach <strong>{plan.reach_limit.toLocaleString('en-IN')}</strong> customers in city</> : <>Listing on the LocalPro marketplace</>}</span>
                     </li>
                     <li className="flex items-center gap-3 text-xs text-gray-300">
                       {plan.whatsapp_enabled ? (
@@ -243,7 +243,7 @@ export default function App() {
                     </li>
                     <li className="flex items-center gap-3 text-xs text-gray-300">
                       <Check size={14} className="text-emerald-400 shrink-0" />
-                      <span>Auto-matching by city &amp; category</span>
+                      <span>Auto-matching by city</span>
                     </li>
                   </ul>
                 </div>
@@ -281,7 +281,7 @@ export default function App() {
               <tr>
                 <td className="p-4 text-gray-300 font-medium">Outreach Reach Limit</td>
                 {plans.map(p => (
-                  <td key={p.tier} className="p-4 text-center text-white font-bold">{p.reach_limit}</td>
+                  <td key={p.tier} className="p-4 text-center text-white font-bold">{p.whatsapp_enabled || p.facebook_enabled ? p.reach_limit.toLocaleString('en-IN') : '—'}</td>
                 ))}
               </tr>
               <tr>
