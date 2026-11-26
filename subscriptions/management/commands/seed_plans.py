@@ -15,8 +15,8 @@ PLANS = [
         "whatsapp_enabled": False,
         "facebook_enabled": False,
         "description": (
-            "Free plan. The platform will reach out to 5 potential customers "
-            "in your city who need your type of service."
+            "Get your business listed on LocalPro and found by customers "
+            "in your city."
         ),
     },
     {
@@ -27,8 +27,8 @@ PLANS = [
         "whatsapp_enabled": True,
         "facebook_enabled": False,
         "description": (
-            "The platform will reach out to 100 potential customers via WhatsApp "
-            "in your city who need your type of service."
+            "We reach up to 5,000 customers in your city "
+            "through WhatsApp."
         ),
     },
     {
@@ -39,8 +39,8 @@ PLANS = [
         "whatsapp_enabled": True,
         "facebook_enabled": True,
         "description": (
-            "The platform will reach out to 10,000 potential customers via "
-            "WhatsApp AND Facebook in your city who need your type of service."
+            "We reach up to 10,000 customers in your city "
+            "through WhatsApp and Facebook."
         ),
     },
 ]
