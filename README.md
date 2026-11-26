@@ -8,7 +8,7 @@ Built during my Full-Stack Development internship (May–Aug 2026). The project 
 
 - **Provider listings:** profiles, categories, city-based search, reviews and ratings with filtering and sorting, and referral/promo codes.
 - **Subscriptions and payments:** Basic, Pro and Max plans, with **Razorpay** checkout and server-side payment signature verification.
-- **Automatic outreach:** when a provider subscribes, a **Celery** worker matches customers by city and service interest and messages them through the **WhatsApp Business Cloud API** and Facebook. Every delivery attempt is logged.
+- **Automatic outreach:** when a provider subscribes, a **Celery** worker picks active, opted-in customers in the provider's city and messages them through the **WhatsApp Business Cloud API** and Facebook. Every delivery attempt is logged as sent or failed.
 - **Authentication:** signup and login through **Supabase Auth (JWT)**, linked to Django users, plus a REST API (`/api/v1/`).
 - **Admin dashboard:** a super-admin dashboard alongside the Django admin (Jazzmin theme).
 - **Pricing page:** a React + TypeScript + Vite pricing table, built with Tailwind.
@@ -33,15 +33,15 @@ Built during my Full-Stack Development internship (May–Aug 2026). The project 
 Provider pays (Razorpay) ──► Subscription activated
                                    │
                                    ▼
-                     trigger_outreach (Celery task, retries ×3)
+                     trigger_outreach (Celery task)          
                                    │
            ┌───────────────────────┼────────────────────────┐
            ▼                       ▼                        ▼
-  Match customers by       Cap by plan's reach      Send via WhatsApp and/or
-  city + service interest  limit                    Facebook, log each attempt
+  Match opted-in           Cap by plan's reach      Send via WhatsApp and/or
+  customers in same city   limit                    Facebook, log each attempt
 ```
 
-The web request returns immediately. All matching and messaging runs in the background worker, so the site stays responsive under load.
+The web request returns immediately. All matching and messaging runs in the background worker, so the site stays responsive under load. A failed send is logged and the rest of the campaign continues, and an outreach error can never undo a completed payment.
 
 ## Project structure
 
