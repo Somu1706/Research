@@ -2,6 +2,8 @@
 
 A full-stack Django marketplace where local service providers (plumbers, tutors, salons and more) subscribe to a plan, get listed and reviewed, and are automatically promoted to matching customers over **WhatsApp** and **Facebook**.
 
+**Live:** this platform now runs in production as [SakhiZone](https://sakhizone.com), rebranded for beauty and spa professionals.
+
 Built during my Full-Stack Development internship (May–Aug 2026). The project started in the company's Azure DevOps repository and was later mirrored here with their permission, so commit authorship in the history reflects the company's accounts.
 
 ## Features
