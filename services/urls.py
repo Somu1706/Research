@@ -16,6 +16,7 @@ urlpatterns = [
     path("services/add/", views.service_add, name="service_add"),
     path("ai-writer/", views.ai_writer, name="ai_writer"),
     path("projects/<int:project_id>/review/", views.submit_review, name="submit_review"),
+    path("reach-estimate/", views.reach_estimate, name="reach_estimate"),
     path("case-studies/", views.case_studies, name="case_studies"),
     path("privacy/", views.privacy, name="privacy"),
     path("thank-you/", views.thank_you, name="thank_you"),
