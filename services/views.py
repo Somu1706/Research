@@ -316,6 +316,23 @@ def ai_writer(request):
     })
 
 
+def reach_estimate(request):
+    """Return how many active, opted-in customers exist in a city.
+
+    Uses the same filter as the outreach worker, so the number shown on the
+    homepage is the number a WhatsApp campaign could actually reach.
+    """
+    from customers.models import Customer
+
+    city = request.GET.get("city", "").strip()
+    if not city:
+        return JsonResponse({"error": "city is required"}, status=400)
+    matched = Customer.objects.filter(
+        city__iexact=city, is_active=True, opted_in_whatsapp=True
+    ).count()
+    return JsonResponse({"city": city, "matched": matched})
+
+
 def case_studies(request):
     return render(request, "case_studies.html")
 
