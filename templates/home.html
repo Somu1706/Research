@@ -94,7 +94,7 @@
       <div>
         <h2 class="font-heading text-3xl sm:text-4xl font-bold tracking-tight text-white mb-4">Calculate Your Local Reach</h2>
         <p class="text-gray-400 leading-relaxed mb-6">
-          Find out exactly how many matching customer leads are currently waiting in our database for your category. Enter your details to view your potential matches instantly and see which subscription plan fits your business.
+          Find out how many opted-in customers in your city are currently in our database. Enter your city to see your potential reach instantly and which subscription plan fits your business.
         </p>
         <ul class="space-y-3.5">
           <li class="flex items-center gap-3 text-sm text-gray-300">
@@ -180,7 +180,7 @@
           <i class="bi bi-ui-checks"></i>
         </div>
         <h5 class="text-lg font-bold text-white mb-2">3. We Match</h5>
-        <p class="text-sm text-gray-400 leading-relaxed">We find people in your city who are looking for exactly your service.</p>
+        <p class="text-sm text-gray-400 leading-relaxed">We find opted-in customers in your city who could use your service.</p>
       </div>
 
       <!-- Step 4 -->
@@ -211,7 +211,7 @@
           <div class="font-heading text-4xl font-extrabold text-white my-4">₹100<span class="text-xs text-gray-500 font-normal">/mo</span></div>
           <ul class="space-y-3 mb-8">
             <li class="flex items-center gap-2.5 text-sm text-gray-300">
-              <i class="bi bi-check-lg text-emerald-400 font-bold"></i> Reach out to 1,000 customers
+              <i class="bi bi-check-lg text-emerald-400 font-bold"></i> Listing on the LocalPro marketplace
             </li>
             <li class="flex items-center gap-2.5 text-sm text-gray-300">
               <i class="bi bi-check-lg text-emerald-400 font-bold"></i> Local city targeting
@@ -413,7 +413,7 @@
           <span class="text-indigo-400 group-open:rotate-180 transition-transform duration-200"><i class="bi bi-chevron-down"></i></span>
         </summary>
         <p class="text-xs text-gray-400 mt-4 leading-relaxed">
-          Depending on your plan, we use official Meta WhatsApp business notification templates, standard SMS pipelines, and automated Facebook Page messaging.
+          Pro reaches customers through official WhatsApp Business messages, and Max adds automated Facebook Page messaging. The Basic plan lists your business without automated messaging.
         </p>
       </details>
 
@@ -469,7 +469,7 @@
       "name": "What channels do you use to contact customers?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Depending on your plan, we use official Meta WhatsApp business notification templates, standard SMS pipelines, and automated Facebook Page messaging."
+        "text": "Pro reaches customers through official WhatsApp Business messages, and Max adds automated Facebook Page messaging. The Basic plan lists your business without automated messaging."
       }
     },
     {
@@ -560,27 +560,32 @@
     calcBtn.disabled = true;
     calcBtn.textContent = 'Calculating Reach...';
 
-    // Simulate database lookup delay for a premium interactive feel
-    setTimeout(() => {
-      // Calculate a deterministic number based on string lengths
-      const baseNum = (city.length * 7) + (category.length * 9);
-      const matched = Math.max(12, (baseNum * 3) % 250);
-      
-      calcMatchCount.textContent = matched;
-      
-      let recommend = "We recommend the Basic plan for this reach.";
-      if (matched > 150) {
-        recommend = "We highly recommend the Max plan for maximum reach!";
-      } else if (matched > 50) {
-        recommend = "We recommend the Pro plan to cover this customer base.";
-      }
-      
-      calcRecommendation.textContent = recommend;
-      calcResult.classList.remove('hidden');
-      
-      calcBtn.disabled = false;
-      calcBtn.textContent = 'Calculate Reach';
-    }, 800);
+    // Real lookup: same city + opted-in filter the outreach worker uses
+    fetch(`{% url 'services:reach_estimate' %}?city=${encodeURIComponent(city)}`)
+      .then(res => res.ok ? res.json() : Promise.reject(res.status))
+      .then(({ matched }) => {
+        calcMatchCount.textContent = matched.toLocaleString('en-IN');
+
+        let recommend;
+        if (matched === 0) {
+          recommend = "No opted-in customers in this city yet. Basic gets you listed while we grow here.";
+        } else if (matched <= 5000) {
+          recommend = "Pro reaches all of them on WhatsApp.";
+        } else {
+          recommend = "Max reaches up to 10,000 of them on WhatsApp and Facebook.";
+        }
+        calcRecommendation.textContent = recommend;
+        calcResult.classList.remove('hidden');
+      })
+      .catch(() => {
+        calcMatchCount.textContent = '–';
+        calcRecommendation.textContent = "Couldn't calculate reach right now. Please try again.";
+        calcResult.classList.remove('hidden');
+      })
+      .finally(() => {
+        calcBtn.disabled = false;
+        calcBtn.textContent = 'Calculate Reach';
+      });
   });
 
   // Animated Counts Ticker
