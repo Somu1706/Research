@@ -4,6 +4,7 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <link rel="icon" type="image/svg+xml" href="{% static 'pricing_app/dist/favicon.svg' %}">
   
   <!-- Layout-critical CSS: render-blocking so browser paints styled content immediately -->
   <link rel="stylesheet" href="{% static 'css/tailwind.css' %}">
@@ -55,7 +56,7 @@
             <span>Local<span class="text-indigo-400">Pro</span></span>
           </a>
           
-          <div class="flex items-center gap-0.5 sm:gap-1">
+          <div class="hidden md:flex items-center gap-1">
             <a class="px-2 sm:px-3 py-2 rounded-lg text-xs sm:text-sm font-medium text-gray-400 hover:text-white hover:bg-white/5 transition-all duration-200" href="{% url 'services:provider_list' %}">
               Find Providers
             </a>
@@ -65,14 +66,14 @@
           </div>
         </div>
 
-        <div class="flex items-center gap-4">
+        <div class="flex items-center gap-2 sm:gap-4">
           {% if user.is_authenticated %}
             <div class="relative group">
               <button class="flex items-center gap-2 px-3 py-2 rounded-xl text-sm font-medium text-gray-300 hover:text-white hover:bg-white/5 transition-all duration-200 border border-transparent hover:border-white/5">
                 <span class="w-6 h-6 rounded-full bg-indigo-500/10 text-indigo-400 border border-indigo-500/20 flex items-center justify-center text-xs font-semibold">
                   {{ user.username|first|upper }}
                 </span>
-                <span>{{ user.username }}</span>
+                <span class="hidden sm:inline">{{ user.username }}</span>
                 <i class="bi bi-chevron-down text-xs text-gray-500"></i>
               </button>
               
@@ -96,16 +97,39 @@
               </div>
             </div>
           {% else %}
-            <a class="px-4 py-2 rounded-xl text-sm font-medium text-gray-400 hover:text-white hover:bg-white/5 transition-all duration-200" href="{% url 'accounts:login' %}">
+            <a class="hidden md:inline-flex px-4 py-2 rounded-xl text-sm font-medium text-gray-400 hover:text-white hover:bg-white/5 transition-all duration-200" href="{% url 'accounts:login' %}">
               Login
             </a>
-            <a class="px-4 py-2 rounded-xl text-sm font-semibold bg-indigo-600 text-white hover:bg-indigo-500 hover:shadow-[0_0_15px_rgba(99,102,241,0.4)] transition-all duration-200" href="{% url 'accounts:register_provider' %}">
+            <a class="px-3 py-2 sm:px-4 rounded-xl text-xs sm:text-sm font-semibold whitespace-nowrap bg-indigo-600 text-white hover:bg-indigo-500 hover:shadow-[0_0_15px_rgba(99,102,241,0.4)] transition-all duration-200" href="{% url 'accounts:register_provider' %}">
               List Your Business
             </a>
           {% endif %}
+          <button type="button" id="mobile-menu-btn" class="md:hidden p-2 rounded-lg text-gray-300 hover:text-white hover:bg-white/5" aria-label="Open menu" aria-expanded="false" aria-controls="mobile-menu">
+            <i class="bi bi-list text-xl"></i>
+          </button>
         </div>
       </div>
     </div>
+
+    <!-- Mobile menu -->
+    <div id="mobile-menu" class="md:hidden hidden border-t border-white/5 px-4 py-3 space-y-1">
+      <a class="block px-3 py-2 rounded-lg text-sm font-medium text-gray-300 hover:text-white hover:bg-white/5" href="{% url 'services:provider_list' %}">Find Providers</a>
+      <a class="block px-3 py-2 rounded-lg text-sm font-medium text-gray-300 hover:text-white hover:bg-white/5" href="{% url 'subscriptions:plans' %}">Pricing</a>
+      {% if not user.is_authenticated %}
+      <a class="block px-3 py-2 rounded-lg text-sm font-medium text-gray-300 hover:text-white hover:bg-white/5" href="{% url 'accounts:login' %}">Login</a>
+      {% endif %}
+    </div>
+    <script>
+      (function () {
+        var btn = document.getElementById('mobile-menu-btn');
+        var menu = document.getElementById('mobile-menu');
+        if (!btn || !menu) return;
+        btn.addEventListener('click', function () {
+          var open = menu.classList.toggle('hidden') === false;
+          btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+        });
+      })();
+    </script>
   </nav>
 
   <!-- Messages -->
