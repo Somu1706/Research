@@ -1,1 +1,17 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-brand-dark text-gray-100 font-sans antialiased;
+    overflow-x: clip; /* stop decorative glows from causing sideways scroll on mobile */
+  }
+}
+
+@layer components {
+  .glass { @apply bg-white/[0.03] backdrop-blur-xl border border-white/10; }
+  .card { @apply bg-brand-card border border-white/10 rounded-2xl; }
+  .text-gradient { @apply bg-gradient-to-r from-indigo-400 to-purple-400 bg-clip-text text-transparent; }
+}
 
